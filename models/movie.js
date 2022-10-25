@@ -30,6 +30,7 @@ const movieSchema = new Schema(
       required: true,
       validate: {
         validator: validator.isURL,
+        message: 'Введенный вами URL не прошел валидацию. Выберите другой URL.',
       },
     },
     trailerLink: { // ссылка на трейлер фильма
@@ -37,6 +38,7 @@ const movieSchema = new Schema(
       required: true,
       validate: {
         validator: validator.isURL,
+        message: 'Введенный вами URL не прошел валидацию. Выберите другой URL.',
       },
     },
     thumbnail: { // миниатюрное изображение постера к фильму
@@ -44,6 +46,7 @@ const movieSchema = new Schema(
       required: true,
       validate: {
         validator: validator.isURL,
+        message: 'Введенный вами URL не прошел валидацию. Выберите другой URL.',
       },
     },
     owner: { // _id пользователя, который сохранил фильм

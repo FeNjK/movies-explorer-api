@@ -7,7 +7,7 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: true,
+      required: [true, 'Требуется ввести email'],
       unique: true,
       validate: {
         validator: validator.isEmail,
