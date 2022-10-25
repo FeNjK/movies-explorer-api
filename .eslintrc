@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": "airbnb-base",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-underscore-dangle": ["error", { "allow": ["id_", "_id"] }],
+    /* "linebreak-style": ["error", "windows"], */
+    "linebreak-style": ["error", "unix"],
+    /* "linebreak-style": 0, */ // или вообще игнорировать перенос строки
+    "no-console": "off"
+  }
+}
