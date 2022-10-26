@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { celebrate, Joi } = require('celebrate');
 const { BadRequestError } = require('../errors/http-status-codes');
-const { findById } = require('../models/movie');
 
 const idValidation = (value) => {
   const isValid = mongoose.isObjectIdOrHexString(value);
@@ -11,20 +10,19 @@ const idValidation = (value) => {
   return value;
 };
 
-const URLValidation = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/mi;
-const passwordValidation = /^[a-zA-Z0-9]{8,30}$/;
+const validURL = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/mi;
 
 const signInValidation = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().custom(passwordValidation),
+    password: Joi.string().required(),
   }),
 });
 
 const signUpValidation = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().custom(passwordValidation),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
   }),
 });
@@ -43,9 +41,9 @@ const createFilmValidation = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().custom(URLValidation),
-    trailerLink: Joi.string().required().custom(URLValidation),
-    thumbnail: Joi.string().required().custom(URLValidation),
+    image: Joi.string().required().regex(validURL),
+    trailerLink: Joi.string().required().regex(validURL),
+    thumbnail: Joi.string().required().regex(validURL),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
@@ -54,7 +52,7 @@ const createFilmValidation = celebrate({
 
 const findByIdValidation = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().custom(idValidation),
+    movieId: Joi.string().required().custom(idValidation),
   }),
 });
 

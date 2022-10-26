@@ -10,7 +10,7 @@
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allow": ["id_", "_id"] }],
-    "no-unescaped-entities": "\"", 
+    // "no-unescaped-entities": "\"", 
     /* "linebreak-style": ["error", "windows"], */
     "linebreak-style": ["error", "unix"],
     /* "linebreak-style": 0, */ // или вообще игнорировать перенос строки
