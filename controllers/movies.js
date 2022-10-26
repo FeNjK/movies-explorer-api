@@ -6,14 +6,20 @@ const {
   NotFoundError,
 } = require('../errors/http-status-codes');
 
+const {
+  errorMessageNotFoundMovie,
+  errorMessageIncorrectMovieDataSave,
+  errorMessageMovieDataDuplication,
+  errorMessageNoAccessDeleteMovie,
+  errorMessageIncorrectMovieDataForDelete,
+} = require('../utils/errorMessages');
+
 const getUserMovies = async (req, res, next) => {
   try {
     const owner = req.user._id;
     const movies = await Movie.find({ owner }).populate(['owner']);
     if (!movies) {
-      throw new NotFoundError(
-        'Фильмы не найдены.',
-      );
+      throw new NotFoundError(errorMessageNotFoundMovie);
     }
     res.send(movies);
   } catch (err) {
@@ -50,47 +56,41 @@ const saveMovie = async (req, res, next) => {
       nameRU,
       nameEN,
       owner,
-     });
-     res.send(movie);
+    });
+    res.send(movie);
   } catch (err) {
     /* console.log(err); */
     if (err.name === 'CastError' || err.name === 'ValidationError') {
-      next(new BadRequestError(
-        'Переданы некорректные данные при cохранении фильма.',
-      ));
+      next(
+        new BadRequestError(errorMessageIncorrectMovieDataSave),
+      );
       return;
     }
     if (err.code === 11000) {
-      next(new ConflictError(
-        'Фильм с указанными данными уже добавлен.',
-      ));
+      next(new ConflictError(errorMessageMovieDataDuplication));
       return;
     }
     next(err);
   }
-}
+};
 
 const deleteSavedMovie = async (req, res, next) => {
   try {
     const movie = await Movie.findById(req.params.movieId);
     const owner = req.user._id;
     if (!movie) {
-      throw new NotFoundError(
-        'Фильм не найден.',
-      );
+      throw new NotFoundError(errorMessageNotFoundMovie);
     }
     if (movie.owner.toString() !== owner) {
-      throw new ForbiddenError(
-        'Вы не можете удалять филмы, добавленный другим пользователем!',
-      );
+      throw new ForbiddenError(errorMessageNoAccessDeleteMovie);
     }
     await Movie.findByIdAndRemove(req.params.movieId);
     res.send(movie);
   } catch (err) {
     if (err.name === 'CastError') {
-      next(new BadRequestError(
-        'Переданы некорректный _id фильма при удалении.',
-      ));
+      next(
+        new BadRequestError(errorMessageIncorrectMovieDataForDelete),
+      );
       return;
     }
     next(err);

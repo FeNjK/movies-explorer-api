@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { UnauthorizedError } = require('../errors/http-status-codes');
+const { errorMessageUserAuthorizations } = require('../utils/errorMessages');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -9,22 +10,16 @@ const auth = (req, res, next) => {
   let payload;
   try {
     if (!token) {
-      next(new UnauthorizedError(
-        'Произошла ошибка авторизации. Введите правильные логин и пароль.',
-      ));
+      next(new UnauthorizedError(errorMessageUserAuthorizations));
       return;
     }
     payload = jwt.verify(
       token,
-      NODE_ENV === 'production'
-        ? JWT_SECRET
-        : 'dev-secret',
+      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
     );
   } catch (err) {
     console.log(err);
-    next(new UnauthorizedError(
-      'Произошла ошибка авторизации. Введите правильные логин и пароль.',
-    ));
+    next(new UnauthorizedError(errorMessageUserAuthorizations));
     return;
   }
   req.user = payload;

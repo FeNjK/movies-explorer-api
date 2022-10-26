@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const { celebrate, Joi } = require('celebrate');
 const { BadRequestError } = require('../errors/http-status-codes');
+const { errorMessageIncorrectId } = require('../utils/errorMessages');
 
 const idValidation = (value) => {
   const isValid = mongoose.isObjectIdOrHexString(value);
   if (!isValid) {
-    throw new BadRequestError('Переданный _id объекта некорректен.');
+    throw new BadRequestError(errorMessageIncorrectId);
   }
   return value;
 };

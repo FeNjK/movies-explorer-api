@@ -8,23 +8,36 @@ const {
   ConflictError,
 } = require('../errors/http-status-codes');
 
+const {
+  errorMessageNotFoundUser,
+  errorMessageIncorrectUserDataSearch,
+  errorMessageIncorrectUserDataCreation,
+  errorMessageUserDataDuplication,
+  errorMessageIncorrectUserDataEdition,
+  errorMessageIncompleteUserData,
+  errorMessageUserAuthorizations,
+} = require('../utils/errorMessages');
+
+const {
+  goodMessageUserAuthorizations,
+  goodMessageUserLogout,
+} = require('../utils/goodMessages');
+
+const cookieSettings = require('../utils/cookieSettings');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUserMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      throw new NotFoundError(
-        'Пользователь с указанным _id не найден.',
-      );
+      throw new NotFoundError(errorMessageNotFoundUser);
     }
     res.send(user);
   } catch (err) {
     /* console.log(err); */
     if (err.name === 'CastError') {
-      next(new BadRequestError(
-        'Поиск осуществляется по некорректным данным.',
-      ));
+      next(new BadRequestError(errorMessageIncorrectUserDataSearch));
       return;
     }
     next(err);
@@ -40,15 +53,11 @@ const createUser = async (req, res, next) => {
   } catch (err) {
     /* console.log(err); */
     if (err.name === 'ValidationError') {
-      next(new BadRequestError(
-        'Переданы некорректные данные при создании пользователя.',
-      ));
+      next(new BadRequestError(errorMessageIncorrectUserDataCreation));
       return;
     }
     if (err.code === 11000) {
-      next(new ConflictError(
-        'Пользователь с таким email уже существует.',
-      ));
+      next(new ConflictError(errorMessageUserDataDuplication));
       return;
     }
     next(err);
@@ -64,19 +73,13 @@ const editUserData = async (req, res, next) => {
       { new: true, runValidators: true },
     );
     if (!user) {
-      throw new NotFoundError(
-        'Пользователь с указанным _id не найден.',
-      );
+      throw new NotFoundError(errorMessageNotFoundUser);
     }
     res.send(user);
   } catch (err) {
     /* console.log(err); */
     if (err.name === 'CastError' || err.name === 'ValidationError') {
-      next(
-        new BadRequestError(
-          'Переданы некорректные данные при обновлении профиля.',
-        ),
-      );
+      next(new BadRequestError(errorMessageIncorrectUserDataEdition));
       return;
     }
     next(err);
@@ -87,33 +90,23 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      throw new BadRequestError(
-        'Пожалуйста, заполните все поля ввода.',
-      );
+      throw new BadRequestError(errorMessageIncompleteUserData);
     }
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      throw new UnauthorizedError(
-        'Произошла ошибка авторизации. Введите правильные логин и пароль.',
-      );
+      throw new UnauthorizedError(errorMessageUserAuthorizations);
     }
     const authorizedUser = await bcrypt.compare(password, user.password);
     if (!authorizedUser) {
-      throw new UnauthorizedError(
-        'Произошла ошибка авторизации. Введите правильные логин и пароль.',
-      );
+      throw new UnauthorizedError(errorMessageUserAuthorizations);
     }
     const token = jwt.sign(
       { _id: user._id },
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
       { expiresIn: '7d' },
     );
-    res.cookie('jwt', token, {
-      maxAge: 3600000 * 24 * 7,
-      httpOnly: true,
-      sameSite: true,
-    });
-    res.send({ message: 'Авторизация прошла успешно.' });
+    res.cookie('jwt', token, cookieSettings);
+    res.send({ message: goodMessageUserAuthorizations });
     /* console.log(user.toJSON()); */
     /* res.send({ token }); */
   } catch (err) {
@@ -123,7 +116,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    res.clearCookie('jwt').send({ message: 'Выход из системы успешно завершен.' });
+    res.clearCookie('jwt').send({ message: goodMessageUserLogout });
   } catch (err) {
     next(err);
   }
