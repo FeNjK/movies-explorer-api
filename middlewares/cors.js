@@ -1,7 +1,7 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  /* 'https://show-me.nomoredomains.club',
-  'http://show-me.nomoredomains.club', */
+  'https://find-and-save.nomoredomains.icu',
+  'http://find-and-save.nomoredomains.icu',
   'localhost:3000',
   'http://localhost:3000',
 ];
