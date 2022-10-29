@@ -25,7 +25,7 @@ const {
 } = require('./utils/errorMessages');
 const { goodMessageSuccessfulConnection } = require('./utils/goodMessages');
 
-const { PORT = 3000 } = process.env;
+const { NODE_ENV, MONGO_URL, PORT = 3000 } = process.env;
 const app = express();
 
 app.use(bodyParser.json());
@@ -55,9 +55,12 @@ app.use(errorHandler);
 
 async function runServer() {
   try {
-    await mongoose.connect(addressMongoDb, {
-      serverSelectionTimeoutMS: 5000,
-    });
+    await mongoose.connect(
+      NODE_ENV === 'production' ? MONGO_URL : addressMongoDb,
+      {
+        serverSelectionTimeoutMS: 5000,
+      },
+    );
     console.log(goodMessageSuccessfulConnection);
 
     await app.listen(PORT, () => {

@@ -7,6 +7,7 @@ const errorMessageIncorrectUserDataEdition = 'Переданы некоррек�
 const errorMessageIncompleteUserData = 'Пожалуйста, заполните все поля ввода.';
 const errorMessageUserAuthorizations = 'Произошла ошибка авторизации. Введите правильные логин и пароль.';
 const errorMessageIncorrectId = 'Переданный _id объекта некорректен.';
+const errorMessageNoUserToken = 'Отсутствует пользовательский токен.';
 
 // For movies controllers
 const errorMessageNotFoundMovie = 'Фильм не найден.';
@@ -29,6 +30,7 @@ module.exports = {
   errorMessageIncompleteUserData,
   errorMessageUserAuthorizations,
   errorMessageIncorrectId,
+  errorMessageNoUserToken,
   errorMessageNotFoundMovie,
   errorMessageIncorrectMovieDataSave,
   errorMessageMovieDataDuplication,

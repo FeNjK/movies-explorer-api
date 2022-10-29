@@ -14,7 +14,6 @@ const {
   errorMessageIncorrectUserDataCreation,
   errorMessageUserDataDuplication,
   errorMessageIncorrectUserDataEdition,
-  errorMessageIncompleteUserData,
   errorMessageUserAuthorizations,
 } = require('../utils/errorMessages');
 
@@ -49,7 +48,7 @@ const createUser = async (req, res, next) => {
     const { name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
-    res.send(user.toJSON());
+    res.send(user);
   } catch (err) {
     /* console.log(err); */
     if (err.name === 'ValidationError') {
@@ -82,6 +81,10 @@ const editUserData = async (req, res, next) => {
       next(new BadRequestError(errorMessageIncorrectUserDataEdition));
       return;
     }
+    if (err.code === 11000) {
+      next(new ConflictError(errorMessageUserDataDuplication));
+      return;
+    }
     next(err);
   }
 };
@@ -89,9 +92,6 @@ const editUserData = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
-      throw new BadRequestError(errorMessageIncompleteUserData);
-    }
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
       throw new UnauthorizedError(errorMessageUserAuthorizations);
@@ -114,12 +114,8 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = async (req, res, next) => {
-  try {
-    res.clearCookie('jwt').send({ message: goodMessageUserLogout });
-  } catch (err) {
-    next(err);
-  }
+const logout = (req, res) => {
+  res.clearCookie('jwt').send({ message: goodMessageUserLogout });
 };
 
 module.exports = {
