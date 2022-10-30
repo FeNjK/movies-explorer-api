@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { UnauthorizedError } = require('../errors/http-status-codes');
-const {
-  errorMessageUserAuthorizations,
-  errorMessageNoUserToken,
-} = require('../utils/errorMessages');
+const { errorMessageNoUserToken } = require('../utils/errorMessages');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -22,7 +19,7 @@ const auth = (req, res, next) => {
     );
   } catch (err) {
     console.log(err);
-    next(new UnauthorizedError(errorMessageUserAuthorizations));
+    next(new UnauthorizedError(errorMessageNoUserToken));
     return;
   }
   req.user = payload;
