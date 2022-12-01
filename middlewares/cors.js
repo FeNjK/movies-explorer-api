@@ -2,8 +2,8 @@
 const allowedCors = [
   'https://find-and-save.nomoredomains.icu',
   'http://find-and-save.nomoredomains.icu',
-  'localhost:3000',
-  'http://localhost:3000',
+  'localhost:3001',
+  'http://localhost:3001',
 ];
 
 const cors = (req, res, next) => {

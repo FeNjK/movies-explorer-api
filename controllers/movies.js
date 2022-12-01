@@ -40,7 +40,9 @@ const saveMovie = async (req, res, next) => {
 
 const deleteSavedMovie = async (req, res, next) => {
   try {
-    const movie = await Movie.findById(req.params.movieId);
+    /* const movie = await Movie.findById(req.params.movieId); */
+    const { movieId } = req.params;
+    const movie = await Movie.findOne(req.params.movieId);
     const owner = req.user._id;
     if (!movie) {
       throw new NotFoundError(errorMessageNotFoundMovie);
@@ -48,7 +50,8 @@ const deleteSavedMovie = async (req, res, next) => {
     if (movie.owner.toString() !== owner) {
       throw new ForbiddenError(errorMessageNoAccessDeleteMovie);
     }
-    await Movie.findByIdAndRemove(req.params.movieId);
+    /* await Movie.findByAndRemove(req.params.movieId); */
+    await Movie.findOneAndRemove({ movieId });
     res.send(movie);
   } catch (err) {
     if (err.name === 'CastError') {

@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+/* const mongoose = require('mongoose'); */
 const { celebrate, Joi } = require('celebrate');
-const { BadRequestError } = require('../errors/http-status-codes');
-const { errorMessageIncorrectId } = require('../utils/errorMessages');
+/* const { BadRequestError } = require('../errors/http-status-codes');
+const { errorMessageIncorrectId } = require('../utils/errorMessages'); */
 
-const idValidation = (value) => {
+/* const idValidation = (value) => {
   const isValid = mongoose.isObjectIdOrHexString(value);
   if (!isValid) {
     throw new BadRequestError(errorMessageIncorrectId);
   }
   return value;
-};
+}; */
 
 const validURL = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/mi;
 
@@ -53,7 +53,8 @@ const createFilmValidation = celebrate({
 
 const findByIdValidation = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required().custom(idValidation),
+    /* movieId: Joi.string().required().custom(idValidation), */
+    movieId: Joi.number().required(),
   }),
 });
 
