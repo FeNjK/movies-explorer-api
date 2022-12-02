@@ -25,7 +25,7 @@ const {
 } = require('./utils/errorMessages');
 const { goodMessageSuccessfulConnection } = require('./utils/goodMessages');
 
-const { NODE_ENV, MONGO_URL, PORT = 3000 } = process.env;
+const { NODE_ENV, MONGO_URL, PORT = 3002 } = process.env;
 const app = express();
 
 app.use(bodyParser.json());
