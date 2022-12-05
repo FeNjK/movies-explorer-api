@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-/* const validator = require('validator'); */
-const { validName, validEmail, validPassword } = require('../middlewares/validation');
+const validator = require('validator');
+// const { validEmail, validPassword } = require('../middlewares/validation');
 
 const userSchema = new Schema(
   {
@@ -12,7 +12,8 @@ const userSchema = new Schema(
       unique: true,
       validate: {
         validator(v) {
-          return validEmail.test(v);
+          /* return validEmail.test(v); */
+          return validator.isEmail(v);
         },
         message: 'Неправильный формат почты',
       },
@@ -22,9 +23,6 @@ const userSchema = new Schema(
       minlength: 2,
       maxlength: 30,
       required: [true, 'Требуется ввести имя'],
-      validator(v) {
-        return validName.test(v);
-      },
     },
     password: {
       type: String,
@@ -32,7 +30,8 @@ const userSchema = new Schema(
       select: false, // эту настройку включать только после проверки хэширования
       validate: {
         validator(v) {
-          return validPassword.test(v);
+          /* return validPassword.test(v); */
+          return validator.isStrongPassword(v);
         },
         message: 'Ваш пароль не удовлетворяет требования безопасности',
       },
