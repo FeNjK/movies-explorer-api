@@ -14,7 +14,7 @@ const { errorMessageIncorrectId } = require('../utils/errorMessages'); */
 const validURL = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/mi;
 // const validPassword = /^[a-zA-Z0-9]{6,40}$/;
 // eslint-disable-next-line max-len
-// const validEmail = /^(([^().,;:s@"]+(.[^<>().,;:s@"]+)*))@(([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3})|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
+// const validEmail = /[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+(?:\.[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+(?:\.[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 const signInValidation = celebrate({
   body: Joi.object().keys({
