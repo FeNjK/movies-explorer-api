@@ -41,8 +41,8 @@ const saveMovie = async (req, res, next) => {
 const deleteSavedMovie = async (req, res, next) => {
   try {
     /* const movie = await Movie.findById(req.params.movieId); */
-    const movie = await Movie.findOne({ movieId: req.params.movieId });
     const owner = req.user._id;
+    const movie = await Movie.findOne({ movieId: req.params.movieId, owner });
     if (!movie) {
       throw new NotFoundError(errorMessageNotFoundMovie);
     }
