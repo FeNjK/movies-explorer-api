@@ -42,8 +42,8 @@ app.get('/crash-test', () => {
 app.use(cors);
 app.post('/signin', signInValidation, login);
 app.post('/signup', signUpValidation, createUser);
+app.post('/signout', logout); // никогда не заводи под защищённый роут!
 app.use(auth);
-app.post('/signout', logout);
 app.use('/', routerUser);
 app.use('/', routerMovie);
 app.use('*', () => {
