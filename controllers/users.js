@@ -108,6 +108,7 @@ const login = async (req, res, next) => {
     res.cookie('jwt', token, cookieSettings);
     res.send({ message: goodMessageUserAuthorizations });
     /* console.log(user.toJSON()); */
+    /* console.log(token); */
     /* res.send({ token }); */
   } catch (err) {
     next(err);
