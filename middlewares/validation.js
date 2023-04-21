@@ -12,25 +12,28 @@ const { errorMessageIncorrectId } = require('../utils/errorMessages'); */
 }; */
 
 const validURL = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/mi;
+// const validPassword = /^[a-zA-Z0-9]{6,40}$/;
+// eslint-disable-next-line max-len
+// const validEmail = /[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+(?:\.[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+(?:\.[a-zA-Z0-9!#$%&*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 const signInValidation = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
+    email: Joi.string().required().email()/* .regex(validEmail) */,
+    password: Joi.string().required()/* .regex(validPassword) */,
   }),
 });
 
 const signUpValidation = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
+    email: Joi.string().required().email()/* .regex(validEmail) */,
+    password: Joi.string().required()/* .regex(validPassword) */,
     name: Joi.string().required().min(2).max(30),
   }),
 });
 
 const userDataUpdateValidation = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().email()/* .regex(validEmail) */,
     name: Joi.string().required().min(2).max(30),
   }),
 });

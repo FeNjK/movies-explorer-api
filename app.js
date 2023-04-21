@@ -25,7 +25,7 @@ const {
 } = require('./utils/errorMessages');
 const { goodMessageSuccessfulConnection } = require('./utils/goodMessages');
 
-const { NODE_ENV, MONGO_URL, PORT = 3000 } = process.env;
+const { NODE_ENV, MONGO_URL, PORT = 3002 } = process.env;
 const app = express();
 
 app.use(bodyParser.json());
@@ -42,8 +42,8 @@ app.get('/crash-test', () => {
 app.use(cors);
 app.post('/signin', signInValidation, login);
 app.post('/signup', signUpValidation, createUser);
+app.post('/signout', logout); // никогда не заводи под защищённый роут!
 app.use(auth);
-app.post('/signout', logout);
 app.use('/', routerUser);
 app.use('/', routerMovie);
 app.use('*', () => {
