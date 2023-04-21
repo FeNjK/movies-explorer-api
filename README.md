@@ -30,7 +30,7 @@ ___
 ___
 >Адрес репозитория: <https://github.com/FeNjK/movies-explorer-api.git>
 ___
->Адрес сервера <https://api.find-and-save.nomoredomains.icu>
+<!-- >Адрес сервера <https://api.find-and-save.nomoredomains.icu> -->
 
 ### **Статус проекта и планы на будущее**
 
